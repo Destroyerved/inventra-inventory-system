@@ -47,9 +47,28 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  // Centralized Error Handling Middleware
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error(`[Error] ${req.method} ${req.url}:`, err.message || err);
+    res.status(err.status || 500).json({
+      error: err.message || "Internal server error",
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
+
+  // Graceful shutdown
+  const shutdown = () => {
+    console.log("Shutting down gracefully...");
+    server.close(() => {
+      process.exit(0);
+    });
+  };
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
 }
 
 startServer();
