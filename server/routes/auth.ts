@@ -10,6 +10,15 @@ router.post("/signup", (req, res) => {
   const { login_id, email, password, name, role } = req.body;
   
   // Validation
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
+    return res.status(400).json({ error: "Name is required" });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    return res.status(400).json({ error: "A valid email address is required" });
+  }
+
   if (!login_id || login_id.length < 6 || login_id.length > 12) {
     return res.status(400).json({ error: "Login ID must be between 6 and 12 characters" });
   }
@@ -22,8 +31,8 @@ router.post("/signup", (req, res) => {
   try {
     const hash = bcrypt.hashSync(password, 10);
     const stmt = db.prepare("INSERT INTO users (login_id, email, password, name, role) VALUES (?, ?, ?, ?, ?)");
-    const info = stmt.run(login_id, email, hash, name, role || "staff");
-    res.status(201).json({ id: info.lastInsertRowid, login_id, email, name, role });
+    const info = stmt.run(login_id, email, hash, name.trim(), role || "staff");
+    res.status(201).json({ id: info.lastInsertRowid, login_id, email, name: name.trim(), role });
   } catch (error: any) {
     if (error.code === "SQLITE_CONSTRAINT_UNIQUE") {
       if (error.message.includes("login_id")) {
@@ -39,6 +48,11 @@ router.post("/signup", (req, res) => {
 
 router.post("/login", (req, res) => {
   const { login_id, password } = req.body;
+
+  if (!login_id || !password) {
+    return res.status(400).json({ error: "Login ID and password are required" });
+  }
+
   const user = db.prepare("SELECT * FROM users WHERE login_id = ?").get(login_id) as any;
 
   if (!user || !bcrypt.compareSync(password, user.password)) {
