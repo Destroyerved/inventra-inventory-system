@@ -42,36 +42,6 @@ It replaces manual registers and Excel sheets with a modern dashboard for produc
 
 ---
 
-## Architecture
-
-```mermaid
-graph TD
-    Client["React Frontend (Vite)"] -->|"REST API"| Server["Node.js and Express Backend"]
-    Server -->|"SQL Queries"| DB[("SQLite Database")]
-    
-    subgraph Frontend Modules
-        AuthUI["Authentication"]
-        DashboardUI["Dashboard and Analytics"]
-        ProductsUI["Product Management"]
-        OpsUI["Operations (Receipts, Deliveries, Transfers, Adjustments)"]
-        LedgerUI["Stock Ledger / Move History"]
-    end
-    
-    subgraph Backend Modules
-        AuthAPI["Auth Routes"]
-        ProductsAPI["Products Routes"]
-        InventoryAPI["Inventory Routes"]
-        OpsAPI["Operations Routes"]
-        DashboardAPI["Dashboard Routes"]
-        FinancesAPI["Finances Routes"]
-    end
-    
-    Client --> Frontend Modules
-    Server --> Backend Modules
-```
-
----
-
 ## Getting Started (Local Development)
 
 ### Prerequisites
