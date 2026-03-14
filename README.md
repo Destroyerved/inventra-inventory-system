@@ -1,8 +1,48 @@
-# Inventra - Inventory Management System
+# Inventra – Inventory Management System
 
-Inventra is a complete modular Inventory Management System designed for warehouse and business environments to replace manual inventory registers and Excel sheets.
+Inventra is a modular inventory management system for warehouses and growing businesses.  
+It replaces manual registers and Excel sheets with a modern dashboard for products, stock, operations, and basic finances.
 
-## 1. System Architecture Diagram
+---
+
+## Features
+
+- **Authentication & roles**
+  - Login / signup with seeded demo users
+  - Roles: admin, manager, staff
+- **Product & catalog management**
+  - Categories, products, SKUs, barcodes, suppliers
+  - Reorder levels and pricing
+- **Warehouse & locations**
+  - Multiple warehouses
+  - Storage locations (racks / shelves / bins)
+- **Inventory & operations**
+  - Inbound receipts, outbound deliveries, internal transfers, adjustments
+  - Per‑location stock tracking
+  - Immutable stock ledger / move history
+- **Dashboard & reports**
+  - KPIs, low‑stock alerts, recent operations
+  - Basic income/expense tracking for operations
+
+---
+
+## Live Demo
+
+[https://inventra-inventory-system.onrender.com/](https://inventra-inventory-system.onrender.com/)
+
+---
+
+## Tech Stack
+
+- **Frontend**: React 19, React Router, Vite, Tailwind CSS, Recharts, Zustand
+- **Backend**: Node.js, Express
+- **Database**: SQLite (via `better-sqlite3`) – file‑based DB (`inventory.db`)
+- **Auth**: JSON Web Tokens (JWT), bcryptjs
+- **Build & Tooling**: TypeScript, Vite, tsx
+
+---
+
+## Architecture
 
 ```mermaid
 graph TD
@@ -23,97 +63,202 @@ graph TD
         InventoryAPI[Inventory Routes]
         OpsAPI[Operations Routes]
         DashboardAPI[Dashboard Routes]
+        FinancesAPI[Finances Routes]
     end
     
     Client --> Frontend Modules
     Server --> Backend Modules
 ```
 
-## 2. Database Schema
+---
 
-The database is built using SQLite (as a prototype for PostgreSQL) with the following tables:
+## Getting Started (Local Development)
 
-*   **users**: `id`, `email`, `password`, `name`, `role`
-*   **categories**: `id`, `name`
-*   **warehouses**: `id`, `name`, `location`
-*   **locations**: `id`, `warehouse_id`, `name`
-*   **products**: `id`, `name`, `sku`, `category_id`, `uom`, `reorder_level`
-*   **inventory**: `id`, `product_id`, `location_id`, `quantity` (Tracks current stock)
-*   **operations**: `id`, `type`, `status`, `date`, `user_id`, `source_location_id`, `dest_location_id`
-*   **operation_lines**: `id`, `operation_id`, `product_id`, `quantity`
-*   **stock_ledger**: `id`, `operation_id`, `product_id`, `quantity_change`, `source_location_id`, `dest_location_id`, `timestamp`, `user_id` (Immutable log of all movements)
+### Prerequisites
 
-## 3. Backend Folder Structure
+- Node.js 20+ (or a recent LTS)
+- npm
 
+### 1. Clone & install
+
+```bash
+git clone <your-repo-url>
+cd inventra
+npm install
 ```
+
+### 2. Environment variables
+
+Create a `.env` file in the project root based on `.env.example`:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+APP_URL=http://localhost:3000
+```
+
+> For local development the app will work without a real `GEMINI_API_KEY`, as long as you don’t hit AI-powered endpoints.  
+
+### 3. Run in development mode
+
+```bash
+npm run dev
+```
+
+The Express server starts on `http://localhost:3000` and proxies Vite in middleware mode.  
+The database file `inventory.db` is created in the `server` folder on first run.
+
+---
+
+## Production Build & Run
+
+### Build frontend
+
+```bash
+npm run build
+```
+
+This generates the SPA into `dist/`. In production, Express serves `dist/` as static files.
+
+### Start in production mode
+
+```bash
+NODE_ENV=production npm run start
+```
+
+By default the app listens on port `3000`.  
+You can override it with `PORT`:
+
+```bash
+PORT=8080 NODE_ENV=production npm run start
+```
+
+---
+
+## Docker & Deployment (Render Example)
+
+This repo includes a `Dockerfile` and `.dockerignore` for containerized deployment.
+
+### Build & run with Docker
+
+```bash
+docker build -t inventra-app .
+docker run -p 3000:3000 --env-file .env inventra-app
+```
+
+Then open `http://localhost:3000`.
+
+### Deploying to Render (Web Service, Docker)
+
+1. Push this repo to GitHub/GitLab.
+2. On Render:
+   - **New → Web Service**
+   - Connect the repo
+   - **Environment**: Docker
+   - Leave **Build Command** and **Start Command** empty (Dockerfile is used).
+3. Set environment variables:
+   - `NODE_ENV=production`
+   - `GEMINI_API_KEY=<your key>`
+   - `APP_URL=https://<your-service-name>.onrender.com`
+4. Deploy. Render will build the image and start the container.  
+   The service URL becomes your app’s public address.
+
+---
+
+## Database Schema (SQLite)
+
+Core tables:
+
+- **users**: `id`, `login_id`, `email`, `password`, `name`, `role`, `otp`, `otp_expiry`
+- **categories**: `id`, `name`
+- **warehouses**: `id`, `name`, `location`, `manager_name`, `contact_number`
+- **locations**: `id`, `warehouse_id`, `name`
+- **products**: `id`, `name`, `sku`, `category_id`, `uom`, `reorder_level`, `price`, `cost`, `description`, `barcode`, `supplier`
+- **inventory**: `id`, `product_id`, `location_id`, `quantity`
+- **operations**: `id`, `reference`, `contact`, `scheduled_date`, `type`, `status`, `date`, `user_id`, `source_location_id`, `dest_location_id`, `notes`, `tracking_number`, `shipping_method`
+- **operation_lines**: `id`, `operation_id`, `product_id`, `quantity`
+- **stock_ledger**: `id`, `reference`, `operation_id`, `product_id`, `quantity_change`, `source_location_id`, `dest_location_id`, `timestamp`, `user_id`
+- **transactions**: `id`, `type`, `amount`, `date`, `reference`, `description`
+
+The schema is initialized and seeded in `server/db.ts`.
+
+---
+
+## Seeded Demo Data & Logins
+
+On first run, if the `users` table is empty, the app seeds:
+
+- **Admin**  
+  - Login ID: `admin123`  
+  - Email: `admin@inventra.com`  
+  - Password: `admin123`
+- **Manager**  
+  - Login ID: `manager1`  
+  - Email: `manager@inventra.com`  
+  - Password: `manager123`
+- **Staff**  
+  - Login ID: `staff1`  
+  - Email: `staff@inventra.com`  
+  - Password: `staff123`
+
+It also seeds example categories, warehouses, locations, products, inventory levels, operations, stock ledger entries, and financial transactions so dashboards and reports render meaningful data immediately.
+
+---
+
+## Project Structure
+
+### Backend
+
+```text
 /server
-  ├── db.ts               # Database initialization and connection
-  ├── routes/
-  │   ├── auth.ts         # Authentication (login, signup, JWT validation)
-  │   ├── dashboard.ts    # Dashboard statistics and KPIs
-  │   ├── inventory.ts    # Current stock levels and locations
-  │   ├── operations.ts   # Receipts, deliveries, transfers, adjustments
-  │   └── products.ts     # Product catalog management
+  ├── db.ts               # Database initialization, schema, seed data
+  └── routes/
+      ├── auth.ts         # Authentication (login, signup, JWT validation)
+      ├── dashboard.ts    # Dashboard statistics and KPIs
+      ├── inventory.ts    # Current stock levels and locations
+      ├── operations.ts   # Receipts, deliveries, transfers, adjustments
+      ├── products.ts     # Product catalog management
+      └── finances.ts     # Income/expense tracking
 ```
 
-## 4. Frontend Folder Structure
+### Frontend
 
-```
+```text
 /src
   ├── components/
-  │   └── Layout.tsx      # Sidebar navigation and topbar
+  │   └── Layout.tsx      # Sidebar navigation and top bar
   ├── lib/
-  │   └── api.ts          # API fetch wrapper with auth token injection
+  │   └── api.ts          # API client with auth token injection
   ├── pages/
-  │   ├── Dashboard.tsx   # KPI cards and Recharts bar chart
-  │   ├── Login.tsx       # Authentication page
-  │   ├── MoveHistory.tsx # Stock ledger view
-  │   ├── Operations.tsx  # Generic page for Receipts/Deliveries/Transfers
-  │   └── Products.tsx    # Product list and creation modal
+  │   ├── Dashboard.tsx
+  │   ├── Login.tsx
+  │   ├── Signup.tsx
+  │   ├── Products.tsx
+  │   ├── Stock.tsx
+  │   ├── Operations.tsx
+  │   ├── MoveHistory.tsx
+  │   ├── Finances.tsx
+  │   └── Settings.tsx
   ├── store/
-  │   └── authStore.ts    # Zustand state management for user session
-  ├── App.tsx             # React Router setup
+  │   └── authStore.ts    # Zustand state for user session
+  ├── App.tsx             # Routes & layout
   └── main.tsx            # React entry point
 ```
 
-## 5. API Endpoints
+---
 
-*   **Auth**: 
-    *   `POST /api/auth/login` - Authenticate user
-    *   `POST /api/auth/signup` - Register new user
-    *   `GET /api/auth/me` - Get current user profile
-*   **Dashboard**: 
-    *   `GET /api/dashboard/stats` - Get KPIs (total products, low stock, etc.)
-*   **Products**: 
-    *   `GET /api/products` - List all products with current stock
-    *   `POST /api/products` - Create a new product
-    *   `GET /api/products/categories` - List product categories
-*   **Inventory**: 
-    *   `GET /api/inventory` - Get current stock per location
-    *   `GET /api/inventory/warehouses` - List warehouses
-    *   `GET /api/inventory/locations` - List specific rack/bin locations
-*   **Operations**: 
-    *   `GET /api/operations` - List all operations
-    *   `POST /api/operations` - Create a new operation (Receipt, Delivery, Transfer, Adjustment)
-    *   `GET /api/operations/ledger` - Get the immutable stock ledger history
+## Roadmap / Ideas
 
-## 6. Example UI Layout
+- Multi‑tenant support (multiple companies)
+- Advanced reporting & exports
+- Role‑based permissions per module
+- PostgreSQL support for production deployments
+- Deeper barcode/QR integration for mobile scanners
 
-The UI follows a modern dashboard layout:
-*   **Left Sidebar**: Dark theme (`bg-slate-900`) with navigation links (Dashboard, Products, Receipts, Deliveries, Transfers, Adjustments, Move History) and user profile at the bottom.
-*   **Top Header**: White background, displays the current page title.
-*   **Main Content Area**: Light gray background (`bg-slate-50`) with white cards for data tables and charts. Uses Tailwind CSS for responsive design.
+---
 
-## 7. Sample Data Flow for Inventory Operations
+## Authors
 
-**Scenario: Receiving 50 Laptops from a Supplier**
+- Ved Sharma  
+- Harshill Bhatt
 
-1.  **User Action**: Warehouse staff navigates to "Receipts" and clicks "New Receipt".
-2.  **Form Input**: Selects Destination Location (e.g., "Main Warehouse - Rack A1"), adds Product "Laptop Pro", and sets Quantity to 50.
-3.  **API Request**: Frontend sends `POST /api/operations` with `type: "receipt"`, `dest_location_id: 1`, and `lines: [{ product_id: 1, quantity: 50 }]`.
-4.  **Backend Transaction**:
-    *   Inserts a new record into `operations`.
-    *   Inserts a new record into `operation_lines`.
-    *   Updates `inventory` table: `UPDATE inventory SET quantity = quantity + 50 WHERE product_id = 1 AND location_id = 1`.
-    *   Inserts a new record into `stock_ledger` with `quantity_change: 50`.
-5.  **UI Update**: The Receipts list refreshes, and the Dashboard KPIs (Total Stock) update accordingly.
+
