@@ -228,7 +228,8 @@ It also seeds example categories, warehouses, locations, products, inventory lev
 
 ## Authors
 
-- Ved Sharma  
-- Harshill Bhatt
+- Ubaid khan  
+- Bhavesh
+- Ansh
 
 
