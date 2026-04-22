@@ -3,6 +3,8 @@
 Inventra is a modular inventory management system for warehouses and growing businesses.  
 It replaces manual registers and Excel sheets with a modern dashboard for products, stock, operations, and basic finances.
 
+2nd Runner Up project at Codeversity Hackathon 2026 @IIT Gandhinagar
+
 ---
 
 ## Features
