@@ -230,8 +230,28 @@ It also seeds example categories, warehouses, locations, products, inventory lev
 
 ## Authors
 
-- Ubaid khan  
-- Bhavesh
+<p align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <div>
+          <img src="https://avatars.githubusercontent.com/Sam-bot-dev?s=120" width="120px;" height="120px;" alt="Bhavesh"/>
+        </div>
+        <div><strong>⭐ Team Lead</strong></div>
+        <div><strong>Bhavesh</strong></div>
+        <a href="https://github.com/Sam-bot-dev">🌐 GitHub</a>
+      </td>
+      <td align="center" width="50%">
+        <div>
+          <img src="https://avatars.githubusercontent.com/notUbaid?s=120" width="120px;" height="120px;" alt="Ubaid khan"/>
+        </div>
+        <div><strong>Teammate</strong></div>
+        <div><strong>Ubaid khan</strong></div>
+        <a href="https://github.com/notUbaid">🌐 GitHub</a>
+      </td>
+    </tr>
+  </table>
+</p>
 - Ansh
 
 
