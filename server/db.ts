@@ -142,6 +142,15 @@ export function initDb() {
     db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_stock_ledger_reference ON stock_ledger(reference)");
   } catch (e) {}
 
+  try {
+    db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_products_sku ON products(sku);
+      CREATE INDEX IF NOT EXISTS idx_inventory_lookup ON inventory(product_id, location_id);
+      CREATE INDEX IF NOT EXISTS idx_operations_status ON operations(status);
+      CREATE INDEX IF NOT EXISTS idx_stock_ledger_product ON stock_ledger(product_id);
+    `);
+  } catch (e) {}
+
   // Seed data if empty
   const userCount = db.prepare("SELECT COUNT(*) as count FROM users").get() as { count: number };
   if (userCount.count === 0) {
