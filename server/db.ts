@@ -59,6 +59,17 @@ export function initDb() {
       FOREIGN KEY (category_id) REFERENCES categories(id)
     );
 
+    CREATE TABLE IF NOT EXISTS suppliers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      contact_person TEXT,
+      email TEXT,
+      phone TEXT,
+      address TEXT,
+      notes TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
     CREATE TABLE IF NOT EXISTS transactions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       type TEXT NOT NULL, -- 'income' or 'expense'
@@ -241,6 +252,30 @@ export function initDb() {
     opStmt.run("WH/OUT/0002", "Customer Y", now, "delivery", "draft", now, 2, 1, null);
     opLineStmt.run(7, 1, 5);
   }
+
+  // Ensure suppliers are seeded
+  try {
+    const supplierCount = db.prepare("SELECT COUNT(*) as count FROM suppliers").get() as { count: number };
+    if (supplierCount.count === 0) {
+      const suppStmt = db.prepare("INSERT INTO suppliers (name, contact_person, email, phone, address, notes) VALUES (?, ?, ?, ?, ?, ?)");
+      suppStmt.run("Apex Tech Hardware", "Marcus Vance", "marcus@apextech.com", "+1 (555) 234-5678", "45 Industrial Pkwy, San Jose, CA", "Primary OEM electronics and laptop supplier with 48h SLA");
+      suppStmt.run("ErgoComfort Furniture", "Elena Rostova", "elena@ergocomfort.com", "+1 (555) 876-5432", "120 Design Blvd, Grand Rapids, MI", "Commercial ergonomic chairs and standing desks");
+      suppStmt.run("OfficeMart Global", "Sarah Jenkins", "orders@officemart.com", "+1 (555) 345-6789", "890 Supply Ave, Chicago, IL", "Bulk paper, consumables, and shipping supplies");
+      suppStmt.run("LogiKey Peripherals", "David Chen", "dchen@logikey.com", "+1 (555) 901-2345", "77 Silicon Way, Austin, TX", "Mice, mechanical keyboards, and USB peripherals");
+    }
+  } catch (e) {}
+
+  // Ensure products have barcodes and suppliers populated
+  try {
+    db.exec(`
+      UPDATE products SET barcode = '890100100101', supplier = 'Apex Tech Hardware' WHERE sku = 'LP-001' AND (barcode IS NULL OR barcode = '');
+      UPDATE products SET barcode = '890100100102', supplier = 'ErgoComfort Furniture' WHERE sku = 'OC-001' AND (barcode IS NULL OR barcode = '');
+      UPDATE products SET barcode = '890100100103', supplier = 'LogiKey Peripherals' WHERE sku = 'WM-001' AND (barcode IS NULL OR barcode = '');
+      UPDATE products SET barcode = '890100100104', supplier = 'LogiKey Peripherals' WHERE sku = 'MK-001' AND (barcode IS NULL OR barcode = '');
+      UPDATE products SET barcode = '890100100105', supplier = 'OfficeMart Global' WHERE sku = 'PP-001' AND (barcode IS NULL OR barcode = '');
+      UPDATE products SET barcode = '890100100106', supplier = 'ErgoComfort Furniture' WHERE sku = 'SD-001' AND (barcode IS NULL OR barcode = '');
+    `);
+  } catch (e) {}
 }
 
 export default db;

@@ -10,6 +10,8 @@ import inventoryRoutes from "./server/routes/inventory.ts";
 import operationRoutes from "./server/routes/operations.ts";
 import dashboardRoutes from "./server/routes/dashboard.ts";
 import financesRoutes from "./server/routes/finances.ts";
+import suppliersRoutes from "./server/routes/suppliers.ts";
+import aiRoutes from "./server/routes/ai.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,6 +33,8 @@ async function startServer() {
   app.use("/api/operations", operationRoutes);
   app.use("/api/dashboard", dashboardRoutes);
   app.use("/api/finances", financesRoutes);
+  app.use("/api/suppliers", suppliersRoutes);
+  app.use("/api/ai", aiRoutes);
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
