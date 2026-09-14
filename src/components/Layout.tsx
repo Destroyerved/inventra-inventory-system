@@ -16,10 +16,14 @@ import {
   BarChart2,
   Menu,
   X,
-  DollarSign
+  DollarSign,
+  Warehouse,
+  Truck,
+  Plus
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ToastContainer } from "./Toast";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,7 +61,9 @@ export default function Layout() {
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Products", href: "/products", icon: Package },
-    { name: "Stock", href: "/stock", icon: Package },
+    { name: "Stock Levels", href: "/stock", icon: Package },
+    { name: "Warehouses", href: "/warehouses", icon: Warehouse },
+    { name: "Suppliers", href: "/suppliers", icon: Truck },
     { name: "Receipts", href: "/receipts", icon: ArrowDownToLine },
     { name: "Deliveries", href: "/deliveries", icon: ArrowUpFromLine },
     { name: "Transfers", href: "/transfers", icon: ArrowRightLeft },
@@ -117,7 +123,7 @@ export default function Layout() {
             <User className="mr-3 h-5 w-5 text-slate-400 shrink-0" />
             <div className="flex flex-col min-w-0">
               <span className="font-medium text-white truncate">{user?.name}</span>
-              <span className="text-xs text-slate-500 truncate">{user?.role}</span>
+              <span className="text-xs text-slate-500 truncate capitalize">{user?.role}</span>
             </div>
           </div>
           <button
@@ -144,18 +150,44 @@ export default function Layout() {
               {navItems.find(item => item.href === location.pathname)?.name || "Dashboard"}
             </h2>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors shrink-0"
-            aria-label="Toggle dark mode"
-          >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Quick Actions */}
+            <div className="hidden md:flex items-center gap-2">
+              <Link
+                to="/receipts"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition-colors"
+              >
+                <Plus className="h-3 w-3" /> Receive
+              </Link>
+              <Link
+                to="/deliveries"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 transition-colors"
+              >
+                <Plus className="h-3 w-3" /> Deliver
+              </Link>
+              <Link
+                to="/transfers"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-100 transition-colors"
+              >
+                <Plus className="h-3 w-3" /> Transfer
+              </Link>
+            </div>
+
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors shrink-0"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+          </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 sm:p-8">
           <Outlet />
         </main>
       </div>
+      <ToastContainer />
     </div>
   );
 }
