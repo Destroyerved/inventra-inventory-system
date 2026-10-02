@@ -1,26 +1,34 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api";
-import { Package, AlertTriangle, ArrowDownToLine, ArrowUpFromLine, AlertCircle, Clock, CheckCircle2, ArrowRight } from "lucide-react";
+import { Package, AlertTriangle, ArrowDownToLine, ArrowUpFromLine, AlertCircle, Clock, CheckCircle2, ArrowRight, DollarSign, Layers } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 import { cn } from "../components/Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AICopilotWidget from "../components/AICopilotWidget";
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
   const [opSummary, setOpSummary] = useState<any>(null);
+  const [forecast, setForecast] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = () => {
       fetchApi("/dashboard/stats").then(setStats).catch(console.error);
       fetchApi("/dashboard/operations-summary").then(setOpSummary).catch(console.error);
+      fetchApi("/ai/forecast").then(setForecast).catch(console.error);
     };
 
     loadData();
-    const interval = setInterval(loadData, 10000); // Poll every 10 seconds
+    const interval = setInterval(loadData, 15000);
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleQuickReorder = (product: any) => {
+    navigate("/receipts");
+  };
 
   if (!stats || !opSummary) return <div className="flex items-center justify-center h-full text-slate-500">Loading dashboard...</div>;
 
@@ -32,10 +40,13 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* AI Copilot & Demand Forecast Briefing */}
+      <AICopilotWidget onQuickReorder={handleQuickReorder} />
+
       {/* Operations Alert Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <OperationAlertCard 
-          title="Receipts" 
+          title="Inbound Receipts" 
           type="receipts"
           data={opSummary.receipts} 
           icon={ArrowDownToLine} 
@@ -44,7 +55,7 @@ export default function Dashboard() {
           link="/receipts" 
         />
         <OperationAlertCard 
-          title="Deliveries" 
+          title="Outbound Deliveries" 
           type="deliveries"
           data={opSummary.deliveries} 
           icon={ArrowUpFromLine} 
@@ -55,11 +66,18 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard title="Total Products in Stock" value={stats.totalStock} icon={Package} color="text-blue-600" bg="bg-blue-100" />
-        <StatCard title="Low Stock Items" value={stats.lowStockItems} icon={AlertTriangle} color="text-amber-600" bg="bg-amber-100" />
+        <StatCard 
+          title="Inventory Valuation" 
+          value={`$${(forecast?.totalValuation || 0).toLocaleString()}`} 
+          icon={DollarSign} 
+          color="text-emerald-600" 
+          bg="bg-emerald-100" 
+        />
+        <StatCard title="Total Stock Units" value={stats.totalStock.toLocaleString()} icon={Package} color="text-blue-600" bg="bg-blue-100" />
+        <StatCard title="Catalog SKUs" value={stats.totalProducts} icon={Layers} color="text-purple-600" bg="bg-purple-100" />
+        <StatCard title="Low Stock Alerts" value={stats.lowStockItems} icon={AlertTriangle} color="text-amber-600" bg="bg-amber-100" />
         <StatCard title="Out of Stock Items" value={stats.outOfStockItems} icon={AlertCircle} color="text-red-600" bg="bg-red-100" />
-        <StatCard title="Pending Receipts" value={stats.pendingReceipts} icon={ArrowDownToLine} color="text-emerald-600" bg="bg-emerald-100" />
-        <StatCard title="Pending Deliveries" value={stats.pendingDeliveries} icon={ArrowUpFromLine} color="text-indigo-600" bg="bg-indigo-100" />
+        <StatCard title="Pending Operations" value={stats.pendingReceipts + stats.pendingDeliveries} icon={Clock} color="text-indigo-600" bg="bg-indigo-100" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

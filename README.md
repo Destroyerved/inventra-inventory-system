@@ -1,237 +1,195 @@
-# Inventra – Inventory Management System
+# Inventra — Enterprise Inventory & Warehouse Operating System
 
-Inventra is a modular inventory management system for warehouses and growing businesses.  
-It replaces manual registers and Excel sheets with a modern dashboard for products, stock, operations, and basic finances.
+<div align="center">
 
-2nd Runner Up project at Codeversity Hackathon 2026 @IIT Gandhinagar
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![React 19](https://img.shields.io/badge/Frontend-React_19_%7C_Vite_%7C_Tailwind-06B6D4?style=flat-square&logo=react)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Backend-Express_%7C_TypeScript_%7C_SQLite-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![AI Copilot](https://img.shields.io/badge/AI_Copilot-Google_Gemini_2.5-4285F4?style=flat-square&logo=google)](https://ai.google.dev/)
+[![Docker](https://img.shields.io/badge/Deployment-Docker_%7C_Render-2496ED?style=flat-square&logo=docker)](https://docker.com)
+[![Status: Production Ready](https://img.shields.io/badge/Status-Production_Ready-10B981?style=flat-square)](https://github.com/Destroyerved/inventra-inventory-system)
 
----
+<p align="center">
+  <strong>A modern, zero-error, one-stop inventory operating platform for multi-warehouse businesses, supply chains, and fast-growing logistics teams.</strong>
+</p>
 
-## Features
+<p align="center">
+  <a href="https://inventra-inventory-system.onrender.com/"><strong>Explore Live Demo »</strong></a>
+</p>
 
-- **Authentication & roles**
-  - Login / signup with seeded demo users
-  - Roles: admin, manager, staff
-- **Product & catalog management**
-  - Categories, products, SKUs, barcodes, suppliers
-  - Reorder levels and pricing
-- **Warehouse & locations**
-  - Multiple warehouses
-  - Storage locations (racks / shelves / bins)
-- **Inventory & operations**
-  - Inbound receipts, outbound deliveries, internal transfers, adjustments
-  - Per‑location stock tracking
-  - Immutable stock ledger / move history
-- **Dashboard & reports**
-  - KPIs, low‑stock alerts, recent operations
-  - Basic income/expense tracking for operations
+</div>
 
 ---
 
-## Live Demo
+## 🌟 Executive Overview
 
-[https://inventra-inventory-system.onrender.com/](https://inventra-inventory-system.onrender.com/)
+**Inventra** replaces fragmented spreadsheets and legacy ERP software with an intuitive, unified operating hub. Engineered from the ground up to solve stockouts, blind inventory transfers, and broken supply chains, Inventra provides real-time multi-location stock telemetry, an immutable double-entry stock ledger, printable barcode label generation, and an embedded **Gemini AI Inventory Copilot**.
 
----
-
-## Tech Stack
-
-- **Frontend**: React 19, React Router, Vite, Tailwind CSS, Recharts, Zustand
-- **Backend**: Node.js, Express
-- **Database**: SQLite (via `better-sqlite3`) – file‑based DB (`inventory.db`)
-- **Auth**: JSON Web Tokens (JWT), bcryptjs
-- **Build & Tooling**: TypeScript, Vite, tsx
+Awarded **2nd Runner Up** at **Codeversity Hackathon 2026 @ IIT Gandhinagar**.
 
 ---
 
-## Getting Started (Local Development)
+## ⚡ The One-Stop Solution: Core Capabilities
+
+### 1. 🤖 AI Inventory Copilot & Smart Forecaster
+- **Live Telemetry Briefing**: Real-time executive summaries generated directly from warehouse burn rates, stock valuations, and upcoming scheduled dispatches.
+- **Predictive Restock Prioritization**: Calculates **Days of Inventory Remaining (DIR)** and flags high-velocity run-out risks before stockouts occur.
+- **Interactive Copilot**: Natural-language query interface powered by **Google Gemini 2.5 / 1.5 Flash** with resilient deterministic fallbacks when offline.
+
+### 2. 🏷️ Printable Barcode & Shelf Label Generator
+- **Universal Barcode Tagging**: Generates high-resolution vector barcodes and QR tags for any SKU or product.
+- **Printable Sticker Sheets**: Instant formatted sheet generator (`@media print` optimized) supporting single-unit labels and multi-label adhesive sheets (4, 8, or 16 labels per page) for warehouse bins and retail racks.
+- **Integrated Camera Scanner**: Scan physical barcodes directly from any mobile or desktop camera to instantly locate stock or validate shipments.
+
+### 3. 🏢 Multi-Facility Warehouse & Bin Mapping
+- **Hierarchical Storage**: Real-time bin mapping across warehouses, zones, racks, and receiving docks.
+- **Capacity & Facility Telemetry**: Live breakdown of units stored, bin count, active facility managers, and direct emergency contacts.
+- **Internal Warehouse Transfers**: One-click internal transfers with automated double-entry ledger verification.
+
+### 4. 🚚 Supplier Relationship Management (SRM)
+- **Approved Vendor Directory**: Comprehensive contact book tracking supplier terms, SLAs, addresses, and catalog affiliations.
+- **Seamless Procurement**: Direct "Inbound Receipt" pipeline pre-populating vendor details and scheduled delivery dates.
+
+### 5. 🛡️ Immutable Stock Ledger & Operations Pipeline
+- **Four Core Operation Routes**: Inbound Receipts (`WH/IN/`), Outbound Deliveries (`WH/OUT/`), Internal Transfers (`WH/INT/`), and Stock Adjustments (`WH/ADJ/`).
+- **Audit-Proof Stock Moves**: Every single physical unit change is permanently recorded in an immutable stock ledger (`SM/00001`...) with user attribution and timestamps.
+- **PDF Packing Slips**: One-click packing slip and delivery bill generation via `jspdf`.
+
+### 6. 💰 Real-Time Operational Finances
+- **Live Margin Analytics**: Automatic revenue recording for fulfilled deliveries and expense calculation for received supplier purchase orders.
+- **Financial Pulse**: Real-time Net Profit, Total Revenue, and Operating Expenses breakdown with CSV export.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    subgraph Frontend ["Frontend Client (React 19 + Vite + Tailwind CSS)"]
+        UI["Modern Dashboard & Navigation Shell"]
+        CopilotUI["AI Copilot Widget & Natural Language Drawer"]
+        BarcodeUI["Printable Barcode & Shelf Label Generator"]
+        Modules["Stock, Warehouses, Suppliers, Operations, Finances"]
+        Toast["Global Toast Notification System"]
+    end
+
+    subgraph Backend ["Backend Engine (Node.js + Express + TypeScript)"]
+        Router["Express API Router (/api/*)"]
+        AuthMiddleware["JWT Verification & Role Guard (admin, manager, staff)"]
+        AIService["AI Engine (Google Gemini 2.5 + Mathematical Fallback)"]
+        StockEngine["Double-Entry Stock Ledger & Valuation Engine"]
+    end
+
+    subgraph Storage ["Persistence Layer (SQLite / better-sqlite3)"]
+        DB[("inventory.db")]
+        Tables["users, products, inventory, warehouses, locations, suppliers, operations, stock_ledger, transactions"]
+    end
+
+    UI --> Router
+    CopilotUI --> AIService
+    BarcodeUI --> UI
+    Router --> AuthMiddleware
+    AuthMiddleware --> StockEngine
+    AIService --> StockEngine
+    StockEngine --> DB
+```
+
+---
+
+## 💻 Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS 4, Recharts, Lucide Icons, Zustand, Framer Motion |
+| **Backend** | Node.js, Express, TypeScript, Better-SQLite3, JWT, BcryptJS |
+| **AI Intelligence** | Google Gemini SDK (`@google/genai`), Predictive Demand Modeling |
+| **Document & Hardware** | jsPDF, jsPDF-AutoTable, HTML5-QRCode Scanner, Native SVG Barcode Generator |
+| **DevOps & Container** | Docker, Docker Compose, Render Cloud Platform |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+- **Node.js** 20+ (LTS recommended)
+- **npm** 9+
 
-- Node.js 20+ (or a recent LTS)
-- npm
-
-### 1. Clone & install
-
+### 1. Clone & Install Dependencies
 ```bash
-git clone <your-repo-url>
-cd inventra
+git clone https://github.com/Destroyerved/inventra-inventory-system.git
+cd inventra-inventory-system
 npm install
 ```
 
-### 2. Environment variables
-
-Create a `.env` file in the project root based on `.env.example`:
-
+### 2. Environment Configuration
+Create a `.env` file in the project root:
 ```env
-GEMINI_API_KEY=your_api_key_here
+PORT=3000
+NODE_ENV=development
 APP_URL=http://localhost:3000
+# Optional: Add your Gemini API key for live AI Copilot intelligence
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
+> *Note: Inventra runs out of the box with zero errors even without a Gemini API key by automatically activating its deterministic predictive forecasting engine.*
 
-> For local development the app will work without a real `GEMINI_API_KEY`, as long as you don’t hit AI-powered endpoints.  
-
-### 3. Run in development mode
-
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
+The server will start at `http://localhost:3000` with Vite Hot Module Replacement (HMR).
 
-The Express server starts on `http://localhost:3000` and proxies Vite in middleware mode.  
-The database file `inventory.db` is created in the `server` folder on first run.
-
----
-
-## Production Build & Run
-
-### Build frontend
-
+### 4. Production Build & Start
 ```bash
 npm run build
-```
-
-This generates the SPA into `dist/`. In production, Express serves `dist/` as static files.
-
-### Start in production mode
-
-```bash
-NODE_ENV=production npm run start
-```
-
-By default the app listens on port `3000`.  
-You can override it with `PORT`:
-
-```bash
-PORT=8080 NODE_ENV=production npm run start
+npm start
 ```
 
 ---
 
-## Docker & Deployment (Render Example)
+## 🐳 Docker Deployment
 
-This repo includes a `Dockerfile` and `.dockerignore` for containerized deployment.
-
-### Build & run with Docker
+Inventra is containerized for zero-configuration cloud deployment:
 
 ```bash
+# Build the Docker image
 docker build -t inventra-app .
-docker run -p 3000:3000 --env-file .env inventra-app
-```
 
-Then open `http://localhost:3000`.
-
-### Deploying to Render (Web Service, Docker)
-
-1. Push this repo to GitHub/GitLab.
-2. On Render:
-   - **New → Web Service**
-   - Connect the repo
-   - **Environment**: Docker
-   - Leave **Build Command** and **Start Command** empty (Dockerfile is used).
-3. Set environment variables:
-   - `NODE_ENV=production`
-   - `GEMINI_API_KEY=<your key>`
-   - `APP_URL=https://<your-service-name>.onrender.com`
-4. Deploy. Render will build the image and start the container.  
-   The service URL becomes your app’s public address.
-
----
-
-## Database Schema (SQLite)
-
-Core tables:
-
-- **users**: `id`, `login_id`, `email`, `password`, `name`, `role`, `otp`, `otp_expiry`
-- **categories**: `id`, `name`
-- **warehouses**: `id`, `name`, `location`, `manager_name`, `contact_number`
-- **locations**: `id`, `warehouse_id`, `name`
-- **products**: `id`, `name`, `sku`, `category_id`, `uom`, `reorder_level`, `price`, `cost`, `description`, `barcode`, `supplier`
-- **inventory**: `id`, `product_id`, `location_id`, `quantity`
-- **operations**: `id`, `reference`, `contact`, `scheduled_date`, `type`, `status`, `date`, `user_id`, `source_location_id`, `dest_location_id`, `notes`, `tracking_number`, `shipping_method`
-- **operation_lines**: `id`, `operation_id`, `product_id`, `quantity`
-- **stock_ledger**: `id`, `reference`, `operation_id`, `product_id`, `quantity_change`, `source_location_id`, `dest_location_id`, `timestamp`, `user_id`
-- **transactions**: `id`, `type`, `amount`, `date`, `reference`, `description`
-
-The schema is initialized and seeded in `server/db.ts`.
-
----
-
-## Seeded Demo Data & Logins
-
-On first run, if the `users` table is empty, the app seeds:
-
-- **Admin**  
-  - Login ID: `admin123`  
-  - Email: `admin@inventra.com`  
-  - Password: `admin123`
-- **Manager**  
-  - Login ID: `manager1`  
-  - Email: `manager@inventra.com`  
-  - Password: `manager123`
-- **Staff**  
-  - Login ID: `staff1`  
-  - Email: `staff@inventra.com`  
-  - Password: `staff123`
-
-It also seeds example categories, warehouses, locations, products, inventory levels, operations, stock ledger entries, and financial transactions so dashboards and reports render meaningful data immediately.
-
----
-
-## Project Structure
-
-### Backend
-
-```text
-/server
-  ├── db.ts               # Database initialization, schema, seed data
-  └── routes/
-      ├── auth.ts         # Authentication (login, signup, JWT validation)
-      ├── dashboard.ts    # Dashboard statistics and KPIs
-      ├── inventory.ts    # Current stock levels and locations
-      ├── operations.ts   # Receipts, deliveries, transfers, adjustments
-      ├── products.ts     # Product catalog management
-      └── finances.ts     # Income/expense tracking
-```
-
-### Frontend
-
-```text
-/src
-  ├── components/
-  │   └── Layout.tsx      # Sidebar navigation and top bar
-  ├── lib/
-  │   └── api.ts          # API client with auth token injection
-  ├── pages/
-  │   ├── Dashboard.tsx
-  │   ├── Login.tsx
-  │   ├── Signup.tsx
-  │   ├── Products.tsx
-  │   ├── Stock.tsx
-  │   ├── Operations.tsx
-  │   ├── MoveHistory.tsx
-  │   ├── Finances.tsx
-  │   └── Settings.tsx
-  ├── store/
-  │   └── authStore.ts    # Zustand state for user session
-  ├── App.tsx             # Routes & layout
-  └── main.tsx            # React entry point
+# Run container on port 3000
+docker run -d -p 3000:3000 --env-file .env --name inventra inventra-app
 ```
 
 ---
 
-## Roadmap / Ideas
+## 🔑 Demo Access Credentials
 
-- Multi‑tenant support (multiple companies)
-- Advanced reporting & exports
-- Role‑based permissions per module
-- PostgreSQL support for production deployments
-- Deeper barcode/QR integration for mobile scanners
+The database initializes with seed telemetry and sample user accounts:
+
+| Role | Login ID | Email | Password | Permissions |
+| :--- | :--- | :--- | :--- | :--- |
+| **System Admin** | `admin123` | `admin@inventra.com` | `admin123` | Full administrative control, user & settings management |
+| **Operations Manager** | `manager1` | `manager@inventra.com` | `manager123` | Product, warehouse, supplier, and inventory validation rights |
+| **Warehouse Staff** | `staff1` | `staff@inventra.com` | `staff123` | Operations drafting, barcode scanning, and stock lookup |
 
 ---
 
-## Authors
+## 👨‍💻 Project Leadership & Author
 
-- Ubaid khan  
-- Bhavesh
-- Ansh
+<div align="center">
 
+### **Ved Sharma**
+**Founder & Lead Software Architect**  
+*Operations Head at Computer Science & Gaming Club (CSGC) · Operations Executive at Persistence*  
+*B.Tech in Computer Engineering (Class of 2028)*  
 
+[![GitHub](https://img.shields.io/badge/GitHub-Destroyerved-181717?style=flat-square&logo=github)](https://github.com/Destroyerved)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ved_Sharma-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/vedsharma17)
+[![Portfolio](https://img.shields.io/badge/Portfolio-vedresume.vercel.app-000000?style=flat-square&logo=vercel)](https://vedresume.vercel.app/)
+[![Email](https://img.shields.io/badge/Email-ved.anilsharma@gmail.com-EA4335?style=flat-square&logo=gmail)](mailto:ved.anilsharma@gmail.com)
+
+</div>
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See `LICENSE` for more information.
