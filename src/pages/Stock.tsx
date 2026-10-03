@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { fetchApi } from "../lib/api";
-import { Package, Search, Download, Barcode as BarcodeIcon, AlertTriangle, Layers, CheckCircle2 } from "lucide-react";
+import { Package, Search, Download, Barcode as BarcodeIcon, AlertTriangle, Layers, CheckCircle2, Zap } from "lucide-react";
 import BarcodeGeneratorModal from "../components/BarcodeGeneratorModal";
+import AutoPOGeneratorModal from "../components/AutoPOGeneratorModal";
 import { showToast } from "../components/Toast";
 
 export default function Stock() {
@@ -9,13 +10,18 @@ export default function Stock() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "healthy" | "low" | "out">("all");
   const [selectedBarcodeProduct, setSelectedBarcodeProduct] = useState<any>(null);
+  const [showAutoPO, setShowAutoPO] = useState(false);
 
-  useEffect(() => {
+  const loadInventory = () => {
     fetchApi("/inventory")
       .then(setInventory)
       .catch((err) => {
         console.error("Failed to load inventory:", err);
       });
+  };
+
+  useEffect(() => {
+    loadInventory();
   }, []);
 
   const handleExportCsv = () => {
@@ -74,12 +80,20 @@ export default function Stock() {
           </p>
         </div>
 
-        <button
-          onClick={handleExportCsv}
-          className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
-        >
-          <Download className="h-4 w-4" /> Export CSV
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowAutoPO(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+          >
+            <Zap className="h-4 w-4" /> 1-Click Auto-Restock
+          </button>
+          <button
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs"
+          >
+            <Download className="h-4 w-4" /> Export CSV
+          </button>
+        </div>
       </div>
 
       {/* Quick Summary Pill Bar */}
@@ -262,6 +276,13 @@ export default function Stock() {
         product={selectedBarcodeProduct}
         isOpen={!!selectedBarcodeProduct}
         onClose={() => setSelectedBarcodeProduct(null)}
+      />
+
+      {/* 1-Click Auto-Restock Modal */}
+      <AutoPOGeneratorModal
+        isOpen={showAutoPO}
+        onClose={() => setShowAutoPO(false)}
+        onSuccess={loadInventory}
       />
     </div>
   );

@@ -1,8 +1,9 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { fetchApi } from "../lib/api";
-import { Warehouse as WarehouseIcon, MapPin, Plus, User, Phone, Layers, Package, X, Check } from "lucide-react";
+import { Warehouse as WarehouseIcon, MapPin, Plus, User, Phone, Layers, Package, X, Check, LayoutGrid, Map } from "lucide-react";
 import { showToast } from "../components/Toast";
 import { useAuthStore } from "../store/authStore";
+import WarehouseVisualMap from "../components/WarehouseVisualMap";
 
 export default function Warehouses() {
   const [warehouses, setWarehouses] = useState<any[]>([]);
@@ -12,6 +13,7 @@ export default function Warehouses() {
   const [showAddWh, setShowAddWh] = useState(false);
   const [showAddLoc, setShowAddLoc] = useState(false);
   const [selectedWhId, setSelectedWhId] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<"visual" | "grid">("visual");
 
   // Form states
   const [whName, setWhName] = useState("");
@@ -217,7 +219,7 @@ export default function Warehouses() {
       {/* Selected Warehouse Details & Bin Mapping */}
       {activeWarehouse && (
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span>{activeWarehouse.name}</span>
@@ -228,6 +230,30 @@ export default function Warehouses() {
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Detailed inventory allotment by rack, shelf, and zone
               </p>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+              <button
+                onClick={() => setViewMode("visual")}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  viewMode === "visual"
+                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                }`}
+              >
+                <Map className="h-3.5 w-3.5" /> 2D Floor Map
+              </button>
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  viewMode === "grid"
+                    ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                }`}
+              >
+                <LayoutGrid className="h-3.5 w-3.5" /> Grid List
+              </button>
             </div>
           </div>
 
@@ -248,6 +274,12 @@ export default function Warehouses() {
                   </button>
                 )}
               </div>
+            ) : viewMode === "visual" ? (
+              <WarehouseVisualMap
+                warehouse={activeWarehouse}
+                locations={activeLocations}
+                inventory={inventory}
+              />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {activeLocations.map((loc) => {
