@@ -12,3 +12,13 @@ coverage/
 *.db-journal
 *.sqlite
 *.sqlite3
+
+# Android build outputs
+.gradle/
+android/app/build/
+android/build/
+android/.gradle/
+android/captures/
+android/.idea/
+android/*.iml
+android/app/*.iml

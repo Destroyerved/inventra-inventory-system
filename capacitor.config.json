@@ -1,0 +1,9 @@
+{
+  "appId": "com.inventra.wms",
+  "appName": "Inventra Floor Terminal",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}
