@@ -25,13 +25,15 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
-  Zap
+  Zap,
+  Smartphone
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ToastContainer } from "./Toast";
 import CommandPalette from "./CommandPalette";
 import AutoPOGeneratorModal from "./AutoPOGeneratorModal";
+import MobileTerminalLauncherModal from "./MobileTerminalLauncherModal";
 import { fetchApi } from "../lib/api";
 import { format } from "date-fns";
 
@@ -46,6 +48,7 @@ export default function Layout() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isAutoRestockOpen, setIsAutoRestockOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isMobileLauncherOpen, setIsMobileLauncherOpen] = useState(false);
   const [recentOperations, setRecentOperations] = useState<any[]>([]);
 
   const [isDark, setIsDark] = useState(() => {
@@ -227,6 +230,16 @@ export default function Layout() {
               Restock Wizard
             </button>
 
+            {/* Mobile Terminal Launcher */}
+            <button
+              onClick={() => setIsMobileLauncherOpen(true)}
+              title="Mobile Floor Companion Terminal"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors"
+            >
+              <Smartphone className="h-3.5 w-3.5 text-emerald-500" />
+              <span className="hidden sm:inline">Mobile Floor App</span>
+            </button>
+
             {/* Notification Center Bell */}
             <div className="relative">
               <button
@@ -332,6 +345,12 @@ export default function Layout() {
       <AutoPOGeneratorModal
         isOpen={isAutoRestockOpen}
         onClose={() => setIsAutoRestockOpen(false)}
+      />
+
+      {/* Mobile Floor Companion Terminal QR & Launcher Modal */}
+      <MobileTerminalLauncherModal
+        isOpen={isMobileLauncherOpen}
+        onClose={() => setIsMobileLauncherOpen(false)}
       />
 
       <ToastContainer />

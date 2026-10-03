@@ -20,6 +20,7 @@ import Reports from "./pages/Reports";
 import Finances from "./pages/Finances";
 import Warehouses from "./pages/Warehouses";
 import Suppliers from "./pages/Suppliers";
+import MobileTerminal from "./pages/MobileTerminal";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const token = useAuthStore((state) => state.token);
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/mobile" element={<ProtectedRoute><MobileTerminal /></ProtectedRoute>} />
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />

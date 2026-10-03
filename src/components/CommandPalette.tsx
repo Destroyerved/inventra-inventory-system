@@ -19,7 +19,8 @@ import {
   Zap, 
   X,
   CornerDownLeft,
-  Barcode
+  Barcode,
+  Smartphone
 } from "lucide-react";
 import { fetchApi } from "../lib/api";
 
@@ -68,9 +69,20 @@ export default function CommandPalette({
     { name: "Movement History Ledger", href: "/history", icon: History, category: "Navigation" },
     { name: "Financial Valuation", href: "/finances", icon: DollarSign, category: "Navigation" },
     { name: "Analytics & Reports", href: "/reports", icon: BarChart2, category: "Navigation" },
+    { name: "Mobile Floor Terminal", href: "/mobile", icon: Smartphone, category: "Navigation" },
   ];
 
   const actionCommands = [
+    {
+      name: "Launch Mobile Warehouse Terminal (Barcode Scanner)",
+      action: () => {
+        onClose();
+        navigate("/mobile");
+      },
+      icon: Smartphone,
+      category: "Quick Actions",
+      badge: "Mobile App",
+    },
     {
       name: "1-Click Auto-Restock Critical SKUs",
       action: () => {

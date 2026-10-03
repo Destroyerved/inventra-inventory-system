@@ -31,39 +31,48 @@ Awarded **2nd Runner Up** at **Codeversity Hackathon 2026 @ IIT Gandhinagar**.
 
 ## ⚡ The One-Stop Solution: Core Capabilities
 
-### 1. 🗺️ Interactive 2D Warehouse Floor Map & Heatmap
+### 1. 📱 Mobile Floor Companion Terminal (`/mobile`)
+- **Factory Floor Ergonomics**: Dedicated mobile web terminal engineered for smartphone and rugged scanner operation (Zebra, Honeywell, OtterBox handhelds) with thumb-optimized touch targets.
+- **Goods In Intake & Receiving**: Scan incoming carton barcodes or PO QR tags at the loading dock, verify physical quantities against purchase orders, and post receipts directly to the ledger.
+- **Guided Pick & Pack Fulfillment**: Route-optimized pick sequences sorted by warehouse aisle; scans verify SKUs before packing to eliminate incorrect dispatches.
+- **Cycle Count HUD & Fast Reconciliation**: Point camera at any rack or product for instant stock telemetry, safety thresholds, and quick-adjust reconciliation buttons (`+1`, `-1`, `+5`, `-5`).
+- **Audio & Haptic Feedback**: Web Audio API tone synthesis (880Hz dual chime on match, 220Hz buzz on mismatch) and haptic vibration (`navigator.vibrate`) engineered for loud factory environments.
+- **Mobile Thermal Label Printing**: Generates formatted adhesive asset tags (Code 128 & QR) ready for mobile Bluetooth thermal sticker printers.
+- **Instant QR Pairing**: Warehouse operators scan the desktop screen QR launcher to open the mobile terminal in seconds with zero app store install.
+
+### 2. 🗺️ Interactive 2D Warehouse Floor Map & Heatmap
 - **Architectural Digital Twin**: Visual 2D floor grid showing warehouse zones (Inbound Receiving Dock, High-Velocity Storage Aisles A/B/C, Bulk Pallet Reserve, and Outbound Dispatch).
 - **Color-Coded Capacity Heatmaps**: Real-time bin occupancy detection (Empty: Gray, Healthy: Emerald, Dense Capacity: Indigo, Stockout Risk: Rose).
 - **Bin Telemetry Inspector**: Click any rack or shelf to inspect stored SKUs, physical quantities, and initiate instant stock transfers or cycle count adjustments.
 
-### 2. ⚡ Global Command Palette (`Ctrl + K` / `Cmd + K`)
+### 3. ⚡ Global Command Palette (`Ctrl + K` / `Cmd + K`)
 - **Spotlight Search**: Raycast-style keyboard navigation across the entire ERP catalog, warehouse facilities, and vendor records.
-- **Instant Actions**: Create inbound receipts, generate delivery orders, transfer stock, print barcodes, and toggle dark/light mode with keyboard hotkeys.
+- **Instant Actions**: Create inbound receipts, generate delivery orders, transfer stock, print barcodes, launch mobile terminal, and toggle dark/light mode with keyboard hotkeys.
 
-### 3. 🛒 1-Click Intelligent Restock Wizard
+### 4. 🛒 1-Click Intelligent Restock Wizard
 - **Automated Replenishment Calculator**: Evaluates current stock against safety reorder points and 30-day outbound velocity to suggest optimal replenishment lots.
 - **Multi-Vendor PO Generation**: Automatically batches critical SKUs by preferred supplier and creates draft Inbound Purchase Receipts (`WH/IN/`) in 1 click.
 
-### 4. 🤖 Executive Intelligence Telemetry (Bento Ribbon)
+### 5. 🤖 Executive Intelligence Telemetry (Bento Ribbon)
 - **Zero-Slop Minimalist Aesthetic**: High-signal Bento grid delivering depletion runway, outbound velocity, and capital efficiency ratios without bulky, distracting purple widgets.
 - **Dual-Engine Intelligence**: Powered by **Google Gemini 2.5 / 1.5** with deterministic mathematical burn-rate fallback when offline.
 - **Spotlight Natural Language Copilot**: Unobtrusive slide-out drawer answering complex inventory questions in plain English.
 
-### 5. 🏷️ Printable Barcode & Shelf Label Generator
+### 6. 🏷️ Printable Barcode & Shelf Label Generator
 - **Universal Barcode Tagging**: Generates high-resolution vector barcodes and QR tags for any SKU or product.
 - **Printable Sticker Sheets**: Instant formatted sheet generator (`@media print` optimized) supporting single-unit labels and multi-label adhesive sheets for warehouse racks.
 - **Integrated Camera Scanner**: Scan physical barcodes directly from any mobile or desktop camera to validate shipments.
 
-### 6. 🚚 Supplier Relationship Management (SRM)
+### 7. 🚚 Supplier Relationship Management (SRM)
 - **Approved Vendor Directory**: Comprehensive contact book tracking supplier terms, SLAs, addresses, and catalog affiliations.
 - **Seamless Procurement**: Direct "Inbound Receipt" pipeline pre-populating vendor details and scheduled delivery dates.
 
-### 7. 🛡️ Immutable Stock Ledger & Operations Pipeline
+### 8. 🛡️ Immutable Stock Ledger & Operations Pipeline
 - **Four Core Operation Routes**: Inbound Receipts (`WH/IN/`), Outbound Deliveries (`WH/OUT/`), Internal Transfers (`WH/INT/`), and Stock Adjustments (`WH/ADJ/`).
 - **Audit-Proof Stock Moves**: Every physical unit change is recorded in an immutable ledger (`SM/00001`...) with user attribution.
 - **PDF Packing Slips**: One-click packing slip and delivery bill generation via `jspdf`.
 
-### 8. 💰 Real-Time Operational Finances
+### 9. 💰 Real-Time Operational Finances
 - **Live Margin Analytics**: Automatic revenue recording for fulfilled deliveries and expense calculation for received supplier purchase orders.
 - **Financial Pulse**: Real-time Net Profit, Total Revenue, and Operating Expenses breakdown with CSV export.
 
