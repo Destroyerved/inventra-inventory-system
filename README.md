@@ -14,7 +14,9 @@
 </p>
 
 <p align="center">
-  <a href="https://inventra-inventory-system.onrender.com/"><strong>Explore Live Demo »</strong></a>
+  <a href="https://inventra-inventory-system.onrender.com/"><strong>Explore Live Web App »</strong></a>
+  &nbsp;•&nbsp;
+  <a href="https://github.com/Destroyerved/inventra-inventory-system/releases/download/v2.0.0/Inventra-Floor-Terminal-v2.0.0.apk"><strong>📲 Download Android APK (v2.0.0) »</strong></a>
 </p>
 
 </div>
